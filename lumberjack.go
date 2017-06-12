@@ -139,6 +139,15 @@ func (l *Logger) Write(p []byte) (n int, err error) {
 	return n, err
 }
 
+// Sync commits the current contents of the file to stable storage.
+// Some log library (like go.uber.org/zap) need this.
+func (l *Logger) Sync() error {
+	if l.file != nil {
+		return l.file.Sync()
+	}
+	return nil
+}
+
 // Close implements io.Closer, and closes the current logfile.
 func (l *Logger) Close() error {
 	l.mu.Lock()
